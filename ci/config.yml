@@ -1,8 +1,10 @@
-global:
+global: 
   marketplace-ami: false
   owner: quickstart-eng@amazon.com
+  project: quickstart-swift
   qsname: quickstart-swift
-  regions:
+  s3bucket: cfn-tonynv
+  regions: 
     - ap-northeast-1
     - ap-northeast-2
     - ap-south-1
@@ -15,11 +17,9 @@ global:
     - us-west-1
     - us-west-2
   reporting: true
- 
-tests:
-  quickstart-swiftt1:
-    parameter_input: quickstart-swift-example-params1.json
-    template_file: quickstart-swift-example1.template
-  quickstart-swiftt2:
-    parameter_input: quickstart-swift-example-params2.json
-    template_file: quickstart-swift-example2.template
+tests: 
+  swift-ecs: 
+    parameter_input: quickstart-swift.json
+    template_file: quickstart-swift.template
+    regions: 
+      - us-east-1
