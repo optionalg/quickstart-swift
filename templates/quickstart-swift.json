@@ -5,7 +5,7 @@
     },
     {
         "ParameterKey": "KeyName",
-        "ParameterValue": "ecs-swift2"
+        "ParameterValue": "cikey"
     },
     {
         "ParameterKey": "KeyPairPath",
