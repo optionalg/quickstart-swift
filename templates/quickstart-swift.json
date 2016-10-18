@@ -5,7 +5,7 @@
     },
     {
         "ParameterKey": "KeyName",
-        "ParameterValue": "tonynv"
+        "ParameterValue": "ecs-swift2"
     },
     {
         "ParameterKey": "KeyPairPath",
@@ -14,5 +14,9 @@
     {
         "ParameterKey": "SSHLocation",
         "ParameterValue": "1.1.1.1/0"
+    },
+    {
+        "ParameterKey": "ECRRepository",
+        "ParameterValue": "testswiftquickstart"
     }
 ]
