@@ -23,7 +23,7 @@
       "ConstraintDescription": "must be a valid EC2 instance type."
     },
     "SSHLocation": {
-      "Description": "The IP address range that can be used to SSH to the EC2 instances Note a value of 0.0.0.0/O will allow access from ANYWARE",
+      "Description": "The IP address range that can be used to SSH to the EC2 instances Note a value of 0.0.0.0/0 will allow access from ANYWARE",
       "Type": "String",
       "MinLength": "9",
       "MaxLength": "18",
@@ -46,6 +46,26 @@
   },
 
   "Resources": {
+    "VPC" : {
+        "Type" : "AWS::EC2::VPC",
+        "Properties" : {
+          "CidrBlock" : "10.0.0.0/16",
+         "EnableDnsSupport" : "false",
+         "EnableDnsHostnames" : "false",
+         "InstanceTenancy" : "default"
+        }
+     },
+
+     "Subnet" : {
+     "Type" : "AWS::EC2::Subnet",
+     "Properties" : {
+       "VpcId" : { "Ref" : "VPC" },
+       "CidrBlock" : "10.0.0.0/24",
+       "MapPublicIpOnLaunch" : "true",
+       "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "AWS::StackId"} } ]
+     }
+   },
+
     "BastionInstance": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
@@ -55,9 +75,10 @@
         "InstanceType": {
           "Ref": "InstanceType"
         },
-        "SecurityGroups": [{
-          "Ref": "BastionInstanceSecurityGroup"
+        "SecurityGroupIds" : [{
+          "Fn::GetAtt": ["BastionInstanceSecurityGroup", "GroupId"]
         }],
+        "SubnetId" : { "Ref" : "Subnet" },
         "KeyName": {
           "Ref": "KeyName"
         },
@@ -76,6 +97,7 @@
     "BastionInstanceSecurityGroup": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
+        "VpcId" : { "Ref" : "VPC" },
         "GroupDescription": "Enable SSH access via port 22",
         "SecurityGroupIngress": [{
           "IpProtocol": "tcp",
@@ -145,9 +167,10 @@
         "InstanceType": {
           "Ref": "InstanceType"
         },
-        "SecurityGroups": [{
-          "Ref": "ClusterInstanceSecurityGroup"
+        "SecurityGroupIds" : [{
+          "Fn::GetAtt": ["ClusterInstanceSecurityGroup", "GroupId"],
         }],
+        "SubnetId" : { "Ref" : "Subnet" },
         "KeyName": {
           "Ref": "KeyName"
         },
@@ -207,6 +230,7 @@
     "ClusterInstanceSecurityGroup": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
+        "VpcId" : { "Ref" : "VPC" },
         "GroupDescription": "Enable SSH access via port 22",
         "SecurityGroupIngress": [{
           "IpProtocol": "tcp",
@@ -237,6 +261,7 @@
       "Type": "AWS::ECS::Cluster"
     }
   },
+
 
   "Outputs": {
     "BastionIp": {
