@@ -168,7 +168,7 @@
           "Ref": "InstanceType"
         },
         "SecurityGroupIds" : [{
-          "Fn::GetAtt": ["ClusterInstanceSecurityGroup", "GroupId"],
+          "Fn::GetAtt": ["ClusterInstanceSecurityGroup", "GroupId"]
         }],
         "SubnetId" : { "Ref" : "Subnet" },
         "KeyName": {
