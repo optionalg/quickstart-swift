@@ -3,7 +3,7 @@ global:
   owner: quickstart-eng@amazon.com
   project: quickstart-swift
   qsname: quickstart-swift
-  s3bucket: quickstart-test-asif
+  s3bucket: cfn-tonynv
   regions:
     - us-east-1
     - us-west-1
@@ -15,5 +15,3 @@ tests:
     template_file: quickstart-swift.template
     regions:
       - us-east-1
-      - us-west-1
-      - us-west-2
