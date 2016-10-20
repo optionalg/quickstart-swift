@@ -50,8 +50,8 @@
         "Type" : "AWS::EC2::VPC",
         "Properties" : {
           "CidrBlock" : "10.0.0.0/16",
-         "EnableDnsSupport" : "false",
-         "EnableDnsHostnames" : "false",
+         "EnableDnsSupport" : "true",
+         "EnableDnsHostnames" : "true",
          "InstanceTenancy" : "default"
         }
      },
@@ -65,6 +65,47 @@
        "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "AWS::StackId"} } ]
      }
    },
+
+   "InternetGateway" : {
+         "Type" : "AWS::EC2::InternetGateway",
+         "Properties" : {
+            "Tags" : [ {"Key" : "foo", "Value" : "bar"}]
+         }
+      },
+
+   "InternetGatewayAttachment" : {
+     "DependsOn" : "InternetGateway",
+      "Type" : "AWS::EC2::VPCGatewayAttachment",
+      "Properties" : {
+          "VpcId" : {"Ref" : "VPC"},
+          "InternetGatewayId" : {"Ref" : "InternetGateway"}
+      }
+   },
+
+   "RouteTableIGW": {
+    "Type": "AWS::EC2::RouteTable",
+    "Properties": {
+                  "VpcId": { "Ref": "VPC" }
+                  }
+    },
+
+   "Route" : {
+        "Type" : "AWS::EC2::Route",
+        "DependsOn" : "InternetGateway",
+        "Properties" : {
+           "RouteTableId" : { "Ref" : "RouteTableIGW" },
+           "DestinationCidrBlock" : "0.0.0.0/0",
+           "GatewayId" : { "Ref" : "InternetGateway" }
+        }
+     },
+
+    "SubnetRouteTableAssociation" : {
+    "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    "DependsOn" : "InternetGateway",
+    "Properties": { "RouteTableId": { "Ref": "RouteTableIGW" },
+                    "SubnetId":     { "Ref": "Subnet" }
+                  }
+    },
 
     "BastionInstance": {
       "Type": "AWS::EC2::Instance",
@@ -168,7 +209,7 @@
           "Ref": "InstanceType"
         },
         "SecurityGroupIds" : [{
-          "Fn::GetAtt": ["ClusterInstanceSecurityGroup", "GroupId"],
+          "Fn::GetAtt": ["ClusterInstanceSecurityGroup", "GroupId"]
         }],
         "SubnetId" : { "Ref" : "Subnet" },
         "KeyName": {
