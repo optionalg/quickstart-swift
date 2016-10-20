@@ -13,5 +13,3 @@ tests:
   swift-ecs:
     parameter_input: quickstart-swift.json
     template_file: quickstart-swift.template
-    regions:
-      - us-east-1
