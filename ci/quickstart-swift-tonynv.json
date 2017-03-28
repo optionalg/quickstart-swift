@@ -1,0 +1,22 @@
+[
+    {
+        "ParameterKey": "InstanceType",
+        "ParameterValue": "t2.small"
+    },
+    {
+        "ParameterKey": "KeyName",
+        "ParameterValue": "tonynv"
+    },
+    {
+        "ParameterKey": "KeyPairPath",
+        "ParameterValue": "~/.ssh/id.rsa"
+    },
+    {
+        "ParameterKey": "SSHLocation",
+        "ParameterValue": "1.1.1.1/0"
+    },
+    {
+        "ParameterKey": "ECRRepository",
+        "ParameterValue": "testswiftquickstart"
+    }
+]
